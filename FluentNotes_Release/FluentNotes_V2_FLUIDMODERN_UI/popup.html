@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fluent Notes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Abel&family=Agbalumo&family=Alan+Sans:wght@300..900&family=Arimo:ital,wght@0,400..700;1,400..700&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Borel&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@400..700&family=Comic+Relief:wght@400;700&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Crafty+Girls&family=Delius+Swash+Caps&family=Dosis:wght@200..800&family=Exo:ital,wght@0,100..900;1,100..900&family=Fredoka:wght@300..700&family=Fuzzy+Bubbles:wght@400;700&family=Indie+Flower&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=League+Spartan:wght@100..900&family=Lily+Script+One&family=Meow+Script&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Parkinsans:wght@300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+AU+NSW:wght@100..400&family=Playwrite+AU+SA:wght@100..400&family=Playwrite+AU+TAS:wght@100..400&family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+DE+SAS:wght@100..400&family=Playwrite+DK+Uloopet:wght@100..400&family=Playwrite+HU:wght@100..400&family=Playwrite+IN:wght@100..400&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ribeye+Marrow&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sacramento&family=Sanchez:ital@0;1&family=Satisfy&family=Send+Flowers&family=Smooch+Sans:wght@100..900&family=Space+Grotesk:wght@300..700&family=Special+Gothic:wght@400..700&family=Twinkle+Star&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Varela+Round&family=Vibur&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div class="app" id="app">
+
+        <!-- ============ COL 1: NAV (smart lists + espacios + notas) ============ -->
+        <aside class="nav">
+            <header class="nav-header">
+                <div class="brand">
+                    <span class="brand-logo">N</span>
+                    <h1>Fluent Notes</h1>
+                </div>
+                <div class="nav-actions">
+                    <button id="paletteBtn" class="ghost-icon" title="Workspace theme" aria-label="Workspace theme">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                        </svg>
+                    </button>
+                    <button id="themeBtn" class="ghost-icon" title="Change theme" aria-label="Change theme">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path
+                                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="search-wrap">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+                </svg>
+                <input id="searchInput" type="text" placeholder="Search notes, tags…" />
+            </div>
+
+            <nav class="smart-lists">
+                <button class="nav-item" data-view="all">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 5h16M4 10h16M4 15h10M4 20h10"></path>
+                    </svg>
+                    <span class="nav-label">All notes</span>
+                    <span class="count" data-count="all">0</span>
+                </button>
+                <button class="nav-item" data-view="pinned">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 2l2 6h6l-5 4 2 7-5-4-5 4 2-7-5-4h6z"></path>
+                    </svg>
+                    <span class="nav-label">Pinned</span>
+                    <span class="count" data-count="pinned">0</span>
+                </button>
+                <button class="nav-item" data-view="recent">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M12 7v5l3 2"></path>
+                    </svg>
+                    <span class="nav-label">Recent</span>
+                    <span class="count" data-count="recent">0</span>
+                </button>
+            </nav>
+
+            <div class="section-spaces">
+                <div class="section-head">
+                    <h2>SPACES</h2>
+                    <div class="section-actions">
+                        <button id="addSpaceBtn" class="ghost-icon tiny" title="New Space" aria-label="New Space">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button id="addNoteBtn" class="ghost-icon tiny" title="New Note (Alt+Shift+N)"
+                            aria-label="New Note">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                                stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <ul id="spaceTree" class="space-tree"></ul>
+            </div>
+
+            <div class="nav-footer">
+                <button id="backupBtn" class="ghost-btn" title="Export JSON Backup">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                    </svg>
+                    Backup
+                </button>
+                <button id="restoreBtn" class="ghost-btn" title="Restore from JSON">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+                    </svg>
+                    Restore
+                </button>
+                <input type="file" id="restoreFile" accept=".json" hidden />
+            </div>
+        </aside>
+
+        <!-- ============ COL 2: EDITOR ============ -->
+        <section class="editor">
+            <header class="editor-toolbar">
+                <div class="format-group">
+                    <button data-cmd="bold" class="fmt-btn" title="Bold (selection)"><strong>B</strong></button>
+                    <button data-cmd="italic" class="fmt-btn" title="Italic (selection)"><em>I</em></button>
+                    <button data-cmd="underline" class="fmt-btn" title="Underline (selection)"><u>U</u></button>
+                    <button data-cmd="insertUnorderedList" class="fmt-btn" title="List">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <circle cx="4" cy="6" r="1"></circle>
+                            <circle cx="4" cy="12" r="1"></circle>
+                            <circle cx="4" cy="18" r="1"></circle>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="font-group">
+                    <select id="fontFamily" title="Font family (selection)"></select>
+                    <select id="fontSize" title="Font size (selection)">
+                        <option value="12px">12</option>
+                        <option value="14px">14</option>
+                        <option value="16px" selected>16</option>
+                        <option value="18px">18</option>
+                        <option value="20px">20</option>
+                        <option value="24px">24</option>
+                        <option value="28px">28</option>
+                    </select>
+                </div>
+
+                <div class="toolbar-spacer"></div>
+
+                <div class="color-palette" id="colorPalette" role="group" aria-label="Note color"></div>
+
+                <button id="pinBtn" class="icon-btn" title="Pin note" aria-label="Pin note">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="12" y1="17" x2="12" y2="22"></line>
+                        <path
+                            d="M5 17h14v-1.76a2 2 0 0 0-.44-1.24l-2.78-3.47A2 2 0 0 1 15 9.3V5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4.3a2 2 0 0 1-.78 1.23l-2.78 3.5a2 2 0 0 0-.44 1.24z">
+                        </path>
+                    </svg>
+                </button>
+
+                <button id="menuBtn" class="icon-btn menu-trigger" title="More options" aria-haspopup="menu"
+                    aria-expanded="false">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"
+                        stroke-linecap="round" aria-hidden="true">
+                        <circle cx="5" cy="12" r="1"></circle>
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+
+                <div id="noteMenu" class="menu" role="menu">
+                    <button data-action="export-md" role="menuitem">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                        </svg>
+                        Export as Markdown
+                    </button>
+                    <button data-action="export-txt" role="menuitem">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <path d="M14 2v6h6"></path>
+                        </svg>
+                        Export as TXT
+                    </button>
+                    <button data-action="duplicate" role="menuitem">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Duplicate
+                    </button>
+                    <button data-action="move" role="menuitem">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z">
+                            </path>
+                        </svg>
+                        Move to…
+                    </button>
+                    <button data-action="pin" role="menuitem">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 2l2 6h6l-5 4 2 7-5-4-5 4 2-7-5-4h6z"></path>
+                        </svg>
+                        <span id="pinActionLabel">Pin</span>
+                    </button>
+                    <div class="menu-divider"></div>
+                    <button data-action="delete" role="menuitem" class="danger">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                            <path d="M10 11v6M14 11v6"></path>
+                        </svg>
+                        Delete
+                    </button>
+                </div>
+
+                <!-- Hidden color picker for "color custom" -->
+                <input type="color" id="customColor" hidden />
+            </header>
+
+            <!-- Empty state -->
+            <div id="emptyState" class="empty-state hidden">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+                </svg>
+                <p>Select a note or create a new one</p>
+                <button id="emptyAddBtn" class="solid-btn">New Note</button>
+            </div>
+
+            <div id="editorBody" class="editor-body">
+                <div class="editor-meta">
+                    <span id="pinBadge" class="pin-badge hidden" title="Click to unpin">
+                        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true">
+                            <path d="M12 2l2 6h6l-5 4 2 7-5-4-5 4 2-7-5-4h6z" />
+                        </svg>
+                        Pinned
+                    </span>
+                    <span class="dot">·</span>
+                    <span id="metaUpdated" class="meta-date-wrap">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"
+                            aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span class="meta-date-text">—</span>
+                    </span>
+                    <span class="dot">·</span>
+                    <span id="metaFolder" class="meta-folder-wrap">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linejoin="round" stroke-linecap="round" class="meta-icon"
+                            aria-hidden="true">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                            </path>
+                        </svg>
+                        <span class="meta-folder-text">No Folder</span>
+                    </span>
+                </div>
+
+                <input id="titleInput" class="title-input" placeholder="Untitled" />
+
+                <div id="tagsRow" class="tags-row">
+                    <input id="tagInput" class="tag-input" placeholder="Add tag and press Enter…" />
+                </div>
+
+                <div id="editor" class="pad" contenteditable="true" spellcheck="true" role="textbox"
+                    aria-multiline="true"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal: Move to… -->
+    <div id="moveModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="moveModalTitle">
+        <div class="modal">
+            <header class="modal-head">
+                <h3 id="moveModalTitle">Move to…</h3>
+                <button class="ghost-icon" data-close-modal aria-label="Close">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4"
+                        stroke-linecap="round" aria-hidden="true">
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                    </svg>
+                </button>
+            </header>
+            <ul id="moveOptions" class="move-options"></ul>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

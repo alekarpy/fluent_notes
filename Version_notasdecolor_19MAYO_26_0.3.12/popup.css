@@ -1,0 +1,476 @@
+/* ===== Base ===== */
+*{box-sizing:border-box}
+:root{
+    --radius:18px;
+    --shadow:0 4px 20px rgba(0,0,0,.08);
+    --divider:rgba(0,0,0,.06);
+    --ink:#111;
+    --ink-soft:#666;
+    --panel:rgba(255,255,255,.65);
+    --glass-bg:rgba(255,255,255,.7);
+    --glass-stroke:rgba(255,255,255,.3);
+    --hover:rgba(0,0,0,.06);
+    --focus:rgba(0,122,255,.25);
+    --note-accent:#007aff;
+    --scroll-thumb:rgba(0,0,0,.22);
+    --scroll-thumb-hover:rgba(0,0,0,.38);
+}
+body[data-theme="dark"]{
+    --divider:rgba(255,255,255,.08);
+    --ink:#f1f1f1;
+    --ink-soft:#aaa;
+    --panel:rgba(35,35,35,.6);
+    --glass-bg:rgba(30,30,30,.6);
+    --glass-stroke:rgba(255,255,255,.08);
+    --hover:rgba(255,255,255,.08);
+    --focus:rgba(10,132,255,.28);
+    --scroll-thumb:rgba(255,255,255,.22);
+    --scroll-thumb-hover:rgba(255,255,255,.38);
+}
+
+/* Fija el tamaño total del popup */
+html, body {
+    width: 800px;
+    height: 560px;
+    margin: 0;
+    overflow: hidden;
+    color: var(--ink);
+    font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    background: linear-gradient(135deg, var(--bg-grad-a) 0%, var(--bg-grad-b) 100%);
+}
+
+/* ===== Layout — FIX del scroll: grid-template-rows + min-height ===== */
+.wrap{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    grid-template-rows:1fr;   /* fuerza una sola fila de altura completa */
+    gap:16px;
+    padding:16px;
+    height:100vh;
+    min-height:0;
+}
+.wrap > *{ min-height:0; }    /* permite que los hijos del grid scrolleen */
+
+.glass{
+    background:var(--glass-bg);
+    backdrop-filter:saturate(180%) blur(24px);
+    border:1px solid var(--glass-stroke);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+}
+
+/* ===== Sidebar ===== */
+.sidebar{
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    min-height:0;
+}
+.sidebar header{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    padding:12px;
+    border-bottom:1px solid var(--divider);
+    row-gap:10px;
+    column-gap:16px;
+    flex-shrink:0;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:1 1 100%}
+.logo{width:20px;height:20px;border-radius:4px}
+.sidebar h1{font-size:15px;font-weight:700;margin:0;color:var(--ink)}
+
+.actions{display:flex;align-items:center;gap:8px;flex:1 1 100%}
+.search{flex:1 1 auto;min-width:0;height:30px;padding:6px 10px;border-radius:999px;border:1px solid var(--divider);background:var(--panel);color:var(--ink)}
+.search::placeholder{color:var(--ink-soft)}
+
+/* Icon buttons (+ and folder) */
+.icon-btn{
+    width:30px;
+    height:30px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:0;
+    border-radius:8px;
+    background:#f2f2f7;
+    color:var(--ink);
+    cursor:pointer;
+    flex-shrink:0;
+    transition:transform .04s ease, background .15s ease;
+}
+.icon-btn:hover{transform:translateY(-1px);background:rgba(0,0,0,.08)}
+.icon-btn:focus{outline:none;box-shadow:0 0 0 3px var(--focus)}
+body[data-theme="dark"] .icon-btn{background:#2c2c2e}
+body[data-theme="dark"] .icon-btn:hover{background:#3a3a3c}
+
+/* Pills */
+.pill{border:0;border-radius:999px;padding:6px 12px;background:#f2f2f7;cursor:pointer;transition:transform .04s ease,box-shadow .15s ease;white-space:nowrap;min-height:30px;font-weight:500;color:var(--ink)}
+.pill:hover{transform:translateY(-1px)}
+.pill:focus{outline:none;box-shadow:0 0 0 3px var(--focus)}
+.pill.danger{background:#ffe8e8;color:#b00020}
+.pill.primary{background:#007aff;color:#fff}
+.pill.primary:hover{filter:brightness(0.95);transform:translateY(-1px)}
+body[data-theme="dark"] .pill{background:#2c2c2e;color:var(--ink)}
+body[data-theme="dark"] .pill.danger{background:#4a1f1f;color:#ffd2d2}
+
+/* ===== Note list — flex:1 + min-height:0 + scrollbar minimalista ===== */
+.note-list{
+    list-style:none;
+    margin:0;
+    padding:8px;
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    scrollbar-width:thin;
+    scrollbar-color:var(--scroll-thumb) transparent;
+    scroll-behavior:smooth;
+}
+.note-list::-webkit-scrollbar{width:6px;height:6px}
+.note-list::-webkit-scrollbar-track{background:transparent;margin:6px 0}
+.note-list::-webkit-scrollbar-thumb{background-color:var(--scroll-thumb);border-radius:999px;transition:background-color .2s ease}
+.note-list::-webkit-scrollbar-thumb:hover{background-color:var(--scroll-thumb-hover)}
+.note-list::-webkit-scrollbar-corner{background:transparent}
+
+/* ===== Note item ===== */
+.note-item{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    padding:10px 10px 10px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:background .15s ease, box-shadow .15s ease;
+    border:1px solid transparent;
+    background:transparent;
+}
+.note-item:hover{background:rgba(0,0,0,.04)}
+body[data-theme="dark"] .note-item:hover{background:rgba(255,255,255,.04)}
+
+/* The text container inside the item */
+.note-body{
+    flex:1 1 auto;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+/* When a note has custom colors, those are set inline by JS.
+   We need to keep hover/active feedback visible without erasing the custom bg. */
+.note-item.has-color{
+    border:1px solid rgba(0,0,0,.08);
+}
+body[data-theme="dark"] .note-item.has-color{border-color:rgba(255,255,255,.08)}
+.note-item.has-color:hover{filter:brightness(0.96)}
+body[data-theme="dark"] .note-item.has-color:hover{filter:brightness(1.08)}
+
+/* Active note — subtle:
+   - thin 1px ring at 50% accent
+   - faint background tint (4% / 8% dark) */
+.note-item.active{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--note-accent) 50%, transparent);
+}
+.note-item.active:not(.has-color){
+    background:color-mix(in srgb, var(--note-accent) 4%, transparent);
+}
+body[data-theme="dark"] .note-item.active:not(.has-color){
+    background:color-mix(in srgb, var(--note-accent) 8%, transparent);
+}
+
+/* × button on each note (mirrors folder-close behavior) */
+.note-close{
+    opacity:0;
+    width:20px;
+    height:20px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:0;
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    border-radius:6px;
+    padding:0;
+    flex-shrink:0;
+    align-self:center;
+    transition:opacity .15s ease, background .15s ease, color .15s ease;
+}
+.note-item:hover .note-close,
+.note-item.active .note-close{opacity:1}
+.note-close:hover{background:rgba(176,0,32,.10);color:#b00020}
+.note-item.has-color .note-close{color:inherit;opacity:.55}
+.note-item.has-color:hover .note-close{opacity:1}
+
+/* Note title + preview — alignment is critical */
+.note-title{
+    font-size:13px;
+    font-weight:600;
+    color:inherit;
+    line-height:1.3;
+    margin:0;
+    padding:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.note-preview{
+    font-size:12px;
+    color:var(--ink-soft);
+    line-height:1.3;
+    margin:0;
+    padding:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.note-item.has-color .note-preview{
+    color:inherit;
+    opacity:.75;
+}
+
+/* Drag visual */
+.note-item.dragging{opacity:.45}
+
+/* ===== Folder ===== */
+.folder-item{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    border-radius:12px;
+    transition:background .15s ease;
+}
+.folder-item.drag-over{
+    background:rgba(0,122,255,.10);
+    outline:2px dashed var(--note-accent);
+    outline-offset:-2px;
+}
+
+.folder-header{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    min-height:36px;
+    padding:6px 8px;
+    border-radius:10px;
+    cursor:pointer;
+    user-select:none;
+    transition:background .15s ease;
+}
+.folder-header:hover{background:rgba(0,0,0,.04)}
+body[data-theme="dark"] .folder-header:hover{background:rgba(255,255,255,.04)}
+
+.folder-caret{
+    width:22px;
+    height:22px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:0;
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    border-radius:6px;
+    padding:0;
+    flex-shrink:0;
+}
+.folder-caret:hover{background:rgba(0,0,0,.06)}
+body[data-theme="dark"] .folder-caret:hover{background:rgba(255,255,255,.08)}
+
+.folder-icon{
+    width:24px;
+    height:24px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    border-radius:6px;
+    padding:0;
+    flex-shrink:0;
+}
+.folder-icon:hover{background:rgba(0,0,0,.06)}
+body[data-theme="dark"] .folder-icon:hover{background:rgba(255,255,255,.08)}
+
+.folder-name{
+    flex:1 1 auto;
+    min-width:0;
+    margin-left:2px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.folder-rename{
+    flex:1 1 auto;
+    min-width:0;
+    margin-left:2px;
+    height:24px;
+    padding:2px 8px;
+    border-radius:6px;
+    border:1px solid var(--divider);
+    background:var(--panel);
+    color:var(--ink);
+    font-size:13px;
+    font-weight:700;
+    outline:none;
+}
+.folder-rename:focus{box-shadow:0 0 0 3px var(--focus)}
+
+.folder-close{
+    opacity:0;
+    width:20px;
+    height:20px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:0;
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    border-radius:6px;
+    padding:0;
+    flex-shrink:0;
+    transition:opacity .15s ease, background .15s ease, color .15s ease;
+}
+.folder-header:hover .folder-close{opacity:1}
+.folder-close:hover{background:rgba(176,0,32,.10);color:#b00020}
+
+/* Folder children container */
+.folder-children{
+    list-style:none;
+    margin:0;
+    padding:4px 0 4px 24px;  /* indent so notes sit under the folder name */
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+.folder-item.collapsed .folder-children{display:none}
+
+.folder-empty{
+    list-style:none;
+    padding:8px 12px;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-style:italic;
+    text-align:center;
+    border:1px dashed var(--divider);
+    border-radius:10px;
+    margin:2px 0;
+}
+
+/* ===== Editor ===== */
+.editor{
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    height:100%;
+    min-height:0;
+}
+
+.toolbar{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding:10px;
+    border-bottom:1px solid var(--divider);
+    flex-shrink:0;
+}
+.toolbar-formatting,
+.toolbar-actions{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+}
+.toolbar select{
+    appearance:none;
+    font:13px/1.1 inherit;
+    color:var(--ink);
+    background:var(--panel);
+    border:1px solid var(--divider);
+    border-radius:12px;
+    padding:6px 24px 6px 10px;
+    min-height:30px;
+    outline:none;
+    transition:box-shadow .15s ease,border-color .15s ease;
+}
+#fontFamily{max-width:150px}
+#fontSize{width:64px;text-align:center}
+
+.toolbar input[type="color"]{
+    -webkit-appearance:none;
+    appearance:none;
+    width:28px;
+    height:28px;
+    padding:2px;
+    border:1px solid var(--divider);
+    border-radius:8px;
+    background-color:var(--panel);
+    cursor:pointer;
+    flex-shrink:0;
+}
+.toolbar input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
+.toolbar input[type="color"]::-webkit-color-swatch{border:1px solid rgba(0,0,0,0.15);border-radius:5px}
+
+.toolbar .tool{border:0;background:transparent;padding:6px 8px;border-radius:10px;cursor:pointer;color:var(--ink);min-height:30px}
+.toolbar .tool:hover{background:var(--hover)}
+.toolbar .tool:focus{outline:none;box-shadow:0 0 0 3px var(--focus)}
+
+/* Title input (ONLY the big editor one, NOT the sidebar items) */
+.title-input{
+    margin:12px;
+    padding:8px 12px;
+    font-size:20px;
+    font-weight:700;
+    border:0;
+    border-radius:12px;
+    background:rgba(255,255,255,.8);
+    color:var(--ink);
+    flex-shrink:0;
+    transition:outline .15s ease, box-shadow .15s ease;
+}
+body[data-theme="dark"] .title-input{background:rgba(255,255,255,.08)}
+.title-input:focus{
+    outline:1px solid color-mix(in srgb, var(--note-accent) 50%, transparent);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--note-accent) 12%, transparent);
+}
+
+/* Editor body */
+.pad{
+    margin:0 12px 12px;
+    padding:16px 18px;
+    border-radius:16px;
+    flex:1 1 auto;
+    min-height:0;
+    background:rgba(255,255,255,.85);
+    border:1px dashed var(--divider);
+    color:var(--ink);
+    overflow-y:auto;
+    overflow-x:hidden;
+    white-space:pre-wrap;
+    overflow-wrap:break-word;
+    word-break:break-word;
+    scrollbar-width:thin;
+    scrollbar-color:var(--scroll-thumb) transparent;
+}
+.pad::-webkit-scrollbar{width:6px;height:6px}
+.pad::-webkit-scrollbar-track{background:transparent}
+.pad::-webkit-scrollbar-thumb{background-color:var(--scroll-thumb);border-radius:999px}
+.pad::-webkit-scrollbar-thumb:hover{background-color:var(--scroll-thumb-hover)}
+
+body[data-theme="dark"] .pad{background:rgba(255,255,255,.06)}
+.pad:focus{
+    outline:1px solid color-mix(in srgb, var(--note-accent) 50%, transparent);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--note-accent) 12%, transparent);
+}
+
+#editor{line-height:1.45;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;outline:none}
+#editor img{max-width:100%;height:auto;border-radius:8px;display:block;margin:10px 0}
