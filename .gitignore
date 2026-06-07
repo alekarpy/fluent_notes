@@ -17,3 +17,6 @@ node_modules/
 
 # Shell scripts (no subirlos por error)
 *.sh
+
+# Old versions / snapshots
+Version_*/
