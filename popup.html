@@ -142,19 +142,17 @@
                             <circle cx="4" cy="18" r="1"></circle>
                         </svg>
                     </button>
+                    <button id="textColorBtn" class="fmt-btn text-color-btn" title="Text color" aria-label="Text color" aria-haspopup="true" aria-expanded="false">
+                        <span class="tc-icon" aria-hidden="true">
+                            <span class="tc-letter">A</span>
+                            <span class="tc-bar" id="textColorBar"></span>
+                        </span>
+                    </button>
                 </div>
 
                 <div class="font-group">
-                    <select id="fontFamily" title="Font family (selection)"></select>
-                    <select id="fontSize" title="Font size (selection)">
-                        <option value="12px">12</option>
-                        <option value="14px">14</option>
-                        <option value="16px" selected>16</option>
-                        <option value="18px">18</option>
-                        <option value="20px">20</option>
-                        <option value="24px">24</option>
-                        <option value="28px">28</option>
-                    </select>
+                    <button id="fontFamilyBtn" type="button" class="font-family-btn" title="Font family" aria-haspopup="listbox">Sans</button>
+                    <button id="fontSizeBtn" type="button" class="font-size-btn" title="Text style &amp; size" aria-haspopup="dialog">16</button>
                 </div>
 
                 <div class="toolbar-spacer"></div>

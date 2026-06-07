@@ -30,12 +30,74 @@ const DEFAULT_NOTE_TITLE = 'Untitled';
 const DEFAULT_FOLDER_NAME = 'New Space';
 const RECENT_LIMIT = 8;
 
-const SUGGESTED_COLORS = [
-    { id: 'yellow',  value: '#FFF3C4', label: 'Yellow' },
-    { id: 'pink',    value: '#FFCFCF', label: 'Pink' },
-    { id: 'blue',    value: '#D5E8FF', label: 'Blue' },
-    { id: 'green',   value: '#CFEAD8', label: 'Green' },
-    { id: 'lavender',value: '#E1D6F7', label: 'Lavender' }
+const THEME_SWATCHES = {
+    //          primary-1       primary-2       analogous       complementary   neutral-warm
+    orchid:  [
+        { id: 'lavender',  value: '#EDE9FE', label: 'Lavender' },   // primary
+        { id: 'thistle',   value: '#F3E8FF', label: 'Thistle' },    // primary
+        { id: 'blush',     value: '#FCE7F3', label: 'Blush' },      // analogous (pink)
+        { id: 'aqua',      value: '#CCFBF1', label: 'Aqua' },       // complementary (teal)
+        { id: 'cream',     value: '#FEFCE8', label: 'Cream' },      // neutral warm
+    ],
+    ocean:   [
+        { id: 'sky',       value: '#DBEAFE', label: 'Sky' },        // primary
+        { id: 'powder',    value: '#E0F2FE', label: 'Powder' },     // primary
+        { id: 'aqua',      value: '#CCFBF1', label: 'Aqua' },       // analogous (teal)
+        { id: 'lavender',  value: '#EDE9FE', label: 'Lavender' },   // complementary (purple)
+        { id: 'sand',      value: '#FEF3C7', label: 'Sand' },       // neutral warm
+    ],
+    emerald: [
+        { id: 'mint',      value: '#D1FAE5', label: 'Mint' },       // primary
+        { id: 'sage',      value: '#DCFCE7', label: 'Sage' },       // primary
+        { id: 'sky',       value: '#DBEAFE', label: 'Sky' },        // analogous (blue-green)
+        { id: 'peach',     value: '#FFEDD5', label: 'Peach' },      // complementary (warm)
+        { id: 'cream',     value: '#FEFCE8', label: 'Cream' },      // neutral warm
+    ],
+    sunset:  [
+        { id: 'peach',     value: '#FFEDD5', label: 'Peach' },      // primary
+        { id: 'amber',     value: '#FEF3C7', label: 'Amber' },      // primary
+        { id: 'rose',      value: '#FCE7F3', label: 'Rose' },       // analogous (warm pink)
+        { id: 'sage',      value: '#DCFCE7', label: 'Sage' },       // complementary (cool green)
+        { id: 'cream',     value: '#FFFBEB', label: 'Cream' },      // neutral warm
+    ],
+    sakura:  [
+        { id: 'blush',     value: '#FCE7F3', label: 'Blush' },      // primary
+        { id: 'rose',      value: '#FEE2E2', label: 'Rose' },       // primary
+        { id: 'lavender',  value: '#EDE9FE', label: 'Lavender' },   // analogous (purple)
+        { id: 'peach',     value: '#FFEDD5', label: 'Peach' },      // complementary (warm)
+        { id: 'cream',     value: '#FEF9C3', label: 'Cream' },      // neutral warm
+    ],
+};
+
+const SUGGESTED_COLORS = THEME_SWATCHES.orchid; // fallback default
+
+const FOLDER_COLORS = [
+    { id: 'violet',  value: '#9D4EDD', label: 'Violet' },
+    { id: 'pink',    value: '#EC4899', label: 'Pink' },
+    { id: 'blue',    value: '#3B82F6', label: 'Blue' },
+    { id: 'green',   value: '#10B981', label: 'Green' },
+    { id: 'orange',  value: '#F97316', label: 'Orange' },
+    { id: 'red',     value: '#EF4444', label: 'Red' },
+    { id: 'teal',    value: '#14B8A6', label: 'Teal' },
+    { id: 'amber',   value: '#EAB308', label: 'Amber' },
+];
+
+function getThemeSwatches() {
+    return THEME_SWATCHES[state.ui.workspaceTheme] || THEME_SWATCHES.orchid;
+}
+
+const TEXT_COLORS = [
+    { id: 'black',   value: '#1A1A2E', label: 'Near Black' },
+    { id: 'slate',   value: '#475569', label: 'Slate' },
+    { id: 'purple',  value: '#7C3AED', label: 'Purple' },
+    { id: 'pink',    value: '#DB2777', label: 'Pink' },
+    { id: 'rose',    value: '#E11D48', label: 'Rose' },
+    { id: 'blue',    value: '#1D4ED8', label: 'Blue' },
+    { id: 'cyan',    value: '#0891B2', label: 'Cyan' },
+    { id: 'teal',    value: '#0D9488', label: 'Teal' },
+    { id: 'green',   value: '#059669', label: 'Green' },
+    { id: 'amber',   value: '#D97706', label: 'Amber' },
+    { id: 'orange',  value: '#EA580C', label: 'Orange' },
 ];
 
 const FONT_KEYS = [
@@ -51,6 +113,21 @@ const cssFont = key => key === 'system-ui'
     ? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif'
     : `'${key}', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif`;
 
+const HEADING_STYLES = [
+    { key: 'title', badge: 'Title',  preview: 'Title',     size: '40px', weight: '800', lh: '1.1' },
+    { key: 'h1',    badge: 'H1',     preview: 'Heading 1', size: '32px', weight: '700', lh: '1.15' },
+    { key: 'h2',    badge: 'H2',     preview: 'Heading 2', size: '26px', weight: '700', lh: '1.2' },
+    { key: 'h3',    badge: 'H3',     preview: 'Heading 3', size: '22px', weight: '600', lh: '1.2' },
+    { key: 'h4',    badge: 'H4',     preview: 'Heading 4', size: '18px', weight: '600', lh: '1.25' },
+    { key: 'body',  badge: '¶',      preview: 'Body',      size: '16px', weight: '400', lh: '1.5' },
+    { key: 'small', badge: 'Aa',     preview: 'Small',     size: '13px', weight: '400', lh: '1.5' },
+];
+
+const SIZE_OPTIONS = [
+    '10px','11px','12px','13px','14px','16px','18px','20px',
+    '22px','24px','28px','32px','36px','48px','64px','72px','96px',
+];
+
 /* ---------- State ---------- */
 let state = {
     notes: [],
@@ -65,8 +142,12 @@ let savedEditorRange = null;
 let isRenamingFolder = false;
 
 /* ---------- Persistence (Chrome storage) ---------- */
+const hasStorage = typeof chrome !== 'undefined' && !!chrome.storage?.local;
+
 async function loadState() {
-    const data = await chrome.storage.local.get(['notes', 'folders', 'selectedId', 'view', 'ui']);
+    const data = hasStorage
+        ? await chrome.storage.local.get(['notes', 'folders', 'selectedId', 'view', 'ui'])
+        : {};
 
     let notes = Array.isArray(data.notes) ? data.notes : [];
     let folders = Array.isArray(data.folders) ? data.folders : [];
@@ -74,6 +155,7 @@ async function loadState() {
     notes.forEach(n => {
         n.tags = Array.isArray(n.tags) ? n.tags : [];
         n.color = n.color || null;
+        n.textColor = n.textColor || null;
         n.pinned = !!n.pinned;
         if (typeof n.folderId === 'undefined') n.folderId = null;
         if (!n.createdAt) n.createdAt = nowIso();
@@ -105,6 +187,9 @@ async function loadState() {
     state.view = data.view || 'all';
     state.ui = data.ui || { theme: 'auto', workspaceTheme: 'orchid' };
     state.ui.workspaceTheme = state.ui.workspaceTheme || 'orchid';
+    state.ui.recentTextColors = state.ui.recentTextColors || [];
+    state.ui.recentBgColors = state.ui.recentBgColors || [];
+    state.ui.recentFolderColors = state.ui.recentFolderColors || [];
 
     await saveStateRaw();
     applyTheme(state.ui.theme);
@@ -112,6 +197,7 @@ async function loadState() {
 }
 
 async function saveStateRaw() {
+    if (!hasStorage) return;
     await chrome.storage.local.set({
         notes: state.notes,
         folders: state.folders,
@@ -124,6 +210,7 @@ const saveState = debounce(saveStateRaw, 120);
 
 /* Reflect external storage changes (service worker creating notes) */
 function watchStorage() {
+    if (!hasStorage) return;
     chrome.storage.onChanged.addListener(async (changes, area) => {
         if (area !== 'local') return;
         if (changes.notes || changes.folders || changes.selectedId) {
@@ -208,6 +295,9 @@ function openWorkspaceThemePicker(anchorEl) {
             applyWorkspaceTheme(t.key);
             saveState();
             closeWorkspaceThemePopover();
+            // Re-render note color palette with new theme swatches
+            const activeNote = currentNote();
+            if (activeNote) renderColorPalette(activeNote.color || activeNote.settings?.color || null);
             showToast(`Theme: ${t.label}`);
         });
 
@@ -728,12 +818,13 @@ function renderEditor() {
 
     // Set workspace font family
     const noteFont = note.settings?.fontKey || note.fontKey || 'system-ui';
-    $('#fontFamily').value = noteFont;
+    const fontBtn = $('#fontFamilyBtn');
+    if (fontBtn) fontBtn.textContent = noteFont === 'system-ui' ? 'Sans' : noteFont;
     $('#editor').style.fontFamily = cssFont(noteFont);
 
     // Set note font size
     const noteSize = note.settings?.fontSize || note.fontSize || '16px';
-    $('#fontSize').value = noteSize;
+    updateSizeBtn(noteSize);
     $('#editor').style.fontSize = noteSize;
 
     // Pin badge
@@ -767,6 +858,17 @@ function renderEditor() {
         pad.style.removeProperty('--note-color');
     }
 
+    // Text color for whole note
+    if (note.textColor) {
+        pad.style.color = note.textColor;
+    } else {
+        pad.style.removeProperty('color');
+    }
+
+    // Update text color indicator bar
+    const tcBar = $('#textColorBar');
+    if (tcBar) tcBar.style.background = note.textColor || '';
+
     // Color palette state
     renderColorPalette(note.color);
 
@@ -790,7 +892,7 @@ function renderColorPalette(activeColor) {
     none.addEventListener('click', () => setNoteColor(null));
     pal.appendChild(none);
 
-    SUGGESTED_COLORS.forEach(sw => {
+    getThemeSwatches().forEach(sw => {
         const btn = document.createElement('button');
         btn.className = 'swatch' + (activeColor === sw.value ? ' active' : '');
         btn.style.background = sw.value;
@@ -800,15 +902,26 @@ function renderColorPalette(activeColor) {
     });
 
     // Custom (color picker)
-    const isCustom = activeColor && !SUGGESTED_COLORS.find(s => s.value === activeColor);
+    const isCustom = activeColor && !getThemeSwatches().find(s => s.value === activeColor);
     const custom = document.createElement('button');
     custom.className = 'swatch custom' + (isCustom ? ' active' : '');
     custom.title = 'Custom Color';
     if (isCustom) custom.style.background = activeColor;
     custom.addEventListener('click', () => {
-        const picker = $('#customColor');
-        picker.value = activeColor || '#FFD976';
-        picker.click();
+        const rect = custom.getBoundingClientRect();
+        openGenericColorPicker(rect, {
+            popId: 'noteBgColorPop',
+            title: 'Note Background',
+            initColor: activeColor || '#FFD976',
+            swatches: getThemeSwatches(),
+            recentKey: 'recentBgColors',
+            onLive: (hex) => {
+                const pad = $('#editor');
+                if (pad) pad.style.setProperty('--note-color', hex);
+            },
+            onCommit: (hex) => setNoteColor(hex),
+            onReset: () => setNoteColor(null),
+        });
     });
     pal.appendChild(custom);
 }
@@ -880,6 +993,7 @@ function newNote(folderId) {
         html: '',
         tags: [],
         color: null,
+        textColor: null,
         pinned: false,
         folderId: targetFolderId,
         createdAt: ts,
@@ -1160,7 +1274,7 @@ function openFolderColorPicker(folderId, anchorEl) {
     };
 
     grid.appendChild(makeSwatch(null, 'No Color', 'none'));
-    SUGGESTED_COLORS.forEach(sw => grid.appendChild(makeSwatch(sw.value, sw.label)));
+    FOLDER_COLORS.forEach(sw => grid.appendChild(makeSwatch(sw.value, sw.label)));
 
     const custom = document.createElement('button');
     custom.type = 'button';
@@ -1169,19 +1283,18 @@ function openFolderColorPicker(folderId, anchorEl) {
     custom.setAttribute('aria-label', 'Custom Color');
     custom.addEventListener('click', (e) => {
         e.stopPropagation();
-        const picker = document.createElement('input');
-        picker.type = 'color';
-        picker.value = f.color || '#C45BFF';
-        picker.style.position = 'fixed';
-        picker.style.left = '-9999px';
-        pop.appendChild(picker);
-        picker.addEventListener('click', (event) => event.stopPropagation());
-        picker.addEventListener('input', (event) => setFolderColor(folderId, event.target.value));
-        picker.addEventListener('change', () => {
-            picker.remove();
-            closeFolderColorPopover();
-        }, { once: true });
-        picker.click();
+        const rect = custom.getBoundingClientRect();
+        closeFolderColorPopover();
+        openGenericColorPicker(rect, {
+            popId: 'folderCustomColorPop',
+            title: 'Folder Color',
+            initColor: f.color || '#C45BFF',
+            swatches: getThemeSwatches(),
+            recentKey: 'recentFolderColors',
+            onLive: (hex) => setFolderColor(folderId, hex),
+            onCommit: (hex) => setFolderColor(folderId, hex),
+            onReset: () => setFolderColor(folderId, null),
+        });
     });
     grid.appendChild(custom);
 
@@ -1287,6 +1400,890 @@ function applyToSelectionCss(prop, value) {
     }
 }
 
+/* =========================================================
+   TEXT COLOR — CUSTOM PICKER
+   ========================================================= */
+
+/* Color math */
+function tcHsvToHex(h, s, v) {
+    const c = v * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = v - c;
+    let r, g, b;
+    if      (h < 60)  { r = c; g = x; b = 0; }
+    else if (h < 120) { r = x; g = c; b = 0; }
+    else if (h < 180) { r = 0; g = c; b = x; }
+    else if (h < 240) { r = 0; g = x; b = c; }
+    else if (h < 300) { r = x; g = 0; b = c; }
+    else              { r = c; g = 0; b = x; }
+    const toH = n => Math.round((n + m) * 255).toString(16).padStart(2, '0');
+    return '#' + toH(r) + toH(g) + toH(b);
+}
+
+function tcHexToHsv(hex) {
+    const s = (hex || '').replace('#', '').padEnd(6, '0');
+    const r = parseInt(s.slice(0, 2), 16) / 255;
+    const g = parseInt(s.slice(2, 4), 16) / 255;
+    const b = parseInt(s.slice(4, 6), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+    let hv = 0;
+    if (d > 0) {
+        if      (max === r) hv = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) hv = ((b - r) / d + 2) * 60;
+        else                hv = ((r - g) / d + 4) * 60;
+    }
+    return { h: hv, s: max === 0 ? 0 : d / max, v: max };
+}
+
+function tcDrawCanvas(ctx, w, h, hue) {
+    const sg = ctx.createLinearGradient(0, 0, w, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,1)');
+    sg.addColorStop(1, `hsl(${hue},100%,50%)`);
+    ctx.fillStyle = sg;
+    ctx.fillRect(0, 0, w, h);
+    const bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, 'rgba(0,0,0,0)');
+    bg.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+}
+
+function tcAddRecent(color) {
+    if (!color || color === 'inherit') return;
+    state.ui.recentTextColors = state.ui.recentTextColors || [];
+    state.ui.recentTextColors = [color,
+        ...state.ui.recentTextColors.filter(c => c !== color)
+    ].slice(0, 7);
+    saveState();
+}
+
+let _tcOnClose = null;
+
+function closeTextColorPopover() {
+    if (typeof _tcOnClose === 'function') {
+        try { _tcOnClose(); } catch (_) {}
+        _tcOnClose = null;
+    }
+    const pop = $('#textColorPopover');
+    if (pop) pop.remove();
+    $('#textColorBtn')?.setAttribute('aria-expanded', 'false');
+}
+
+function closeAllPopovers() {
+    closeTextColorPopover();
+    closeGenericColorPicker('noteBgColorPop');
+    closeGenericColorPicker('folderCustomColorPop');
+    closeFontPicker();
+    closeTextStylePicker();
+}
+
+function applyTextColorToSelection(color) {
+    const editor = $('#editor');
+    if (!editor) return;
+    editor.focus({ preventScroll: true });
+    restoreEditorSelection();
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.getRangeAt(0).collapsed) {
+        showToast('Select text first');
+        return;
+    }
+    try {
+        document.execCommand('styleWithCSS', false, true);
+        document.execCommand('foreColor', false, color || 'inherit');
+    } catch {}
+    saveEditorSelection();
+    persistEditor();
+    showToast(color ? 'Color applied' : 'Color reset');
+}
+
+function setNoteTextColor(color) {
+    const note = currentNote();
+    if (!note) return;
+    note.textColor = color || null;
+    note.updatedAt = nowIso();
+    saveState();
+    const pad = $('#editor');
+    if (color) pad.style.color = color; else pad.style.removeProperty('color');
+    const tcBar = $('#textColorBar');
+    if (tcBar) tcBar.style.background = color || '';
+    showToast(color ? 'Text color applied' : 'Text color reset');
+}
+
+function openTextColorPopover(anchorEl) {
+    closeAllPopovers();
+
+    // --- state ---
+    // Clone the range so execCommand DOM changes don't invalidate our reference
+    let selRange = null;
+    try {
+        if (savedEditorRange && !savedEditorRange.collapsed) selRange = savedEditorRange.cloneRange();
+    } catch (_) {}
+    let mode = 'selection';
+    let hasInteracted = false;
+    const initColor = currentNote()?.textColor || '#7C3AED';
+    let { h: hue, s: sat, v: val } = tcHexToHsv(initColor);
+    const getHex = () => tcHsvToHex(hue, sat, val);
+
+    // Apply foreColor to the saved selection range.
+    // After each execCommand the DOM may change (span created/replaced), so we
+    // refresh selRange from the browser's post-command selection each time.
+    const applySelColor = (color) => {
+        if (!selRange || selRange.collapsed) { showToast('Select text first'); return; }
+        const editor = $('#editor');
+        if (!editor) return;
+        editor.focus({ preventScroll: true });
+        const sel = window.getSelection();
+        if (!sel) return;
+        sel.removeAllRanges();
+        try { sel.addRange(selRange.cloneRange()); } catch (_) { return; }
+        if (!sel.rangeCount || sel.getRangeAt(0).collapsed) return;
+        try {
+            document.execCommand('styleWithCSS', false, true);
+            document.execCommand('foreColor', false, color || 'inherit');
+        } catch {}
+        // Keep selRange in sync with the post-apply DOM so next call stays valid
+        const selAfter = window.getSelection();
+        if (selAfter && selAfter.rangeCount > 0) {
+            try { selRange = selAfter.getRangeAt(0).cloneRange(); } catch (_) {}
+        }
+        persistEditor();
+    };
+
+    // Debounced live apply
+    let applyTimer = null;
+    const liveApply = () => {
+        hasInteracted = true;
+        clearTimeout(applyTimer);
+        applyTimer = setTimeout(() => {
+            const hex = getHex();
+            if (mode === 'whole') {
+                const pad = $('#editor');
+                if (pad) pad.style.color = hex;
+                const bar = $('#textColorBar');
+                if (bar) bar.style.background = hex;
+            } else {
+                applySelColor(hex);
+            }
+        }, 120);
+    };
+
+    // --- build DOM ---
+    const pop = document.createElement('div');
+    pop.id = 'textColorPopover';
+    pop.className = 'text-color-popover';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'tc-popover-header';
+    const titleEl = document.createElement('span');
+    titleEl.className = 'tc-popover-title';
+    titleEl.textContent = 'Text Color';
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tc-popover-close';
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>`;
+    closeBtn.addEventListener('click', closeTextColorPopover);
+    header.append(titleEl, closeBtn);
+    pop.appendChild(header);
+
+    // Tabs
+    const tabsEl = document.createElement('div');
+    tabsEl.className = 'tc-tabs';
+    const makeTab = (label, modeKey) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tc-tab' + (mode === modeKey ? ' active' : '');
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+            mode = modeKey;
+            tabsEl.querySelectorAll('.tc-tab').forEach(t => t.classList.toggle('active', t === btn));
+            if (modeKey === 'whole') {
+                const nc = currentNote()?.textColor;
+                if (nc) { const hsv = tcHexToHsv(nc); hue = hsv.h; sat = hsv.s; val = hsv.v; }
+                syncAll();
+            }
+        });
+        return btn;
+    };
+    tabsEl.append(makeTab('Selection', 'selection'), makeTab('Whole note', 'whole'));
+    pop.appendChild(tabsEl);
+
+    // Canvas
+    const canvasWrap = document.createElement('div');
+    canvasWrap.className = 'tc-canvas-wrap';
+    const canvas = document.createElement('canvas');
+    canvas.className = 'tc-canvas';
+    const CW = 256, CH = 148;
+    canvas.width = CW; canvas.height = CH;
+    const cursor = document.createElement('div');
+    cursor.className = 'tc-cursor';
+    canvasWrap.append(canvas, cursor);
+    pop.appendChild(canvasWrap);
+
+    // Hue slider
+    const hueWrap = document.createElement('div');
+    hueWrap.className = 'tc-hue-wrap';
+    const hueSlider = document.createElement('input');
+    hueSlider.type = 'range'; hueSlider.min = 0; hueSlider.max = 360; hueSlider.step = 1;
+    hueSlider.className = 'tc-hue'; hueSlider.value = hue;
+    hueSlider.addEventListener('input', () => {
+        hue = parseFloat(hueSlider.value);
+        const ctx = canvas.getContext('2d');
+        tcDrawCanvas(ctx, CW, CH, hue);
+        syncBottom();
+        liveApply();
+    });
+    hueWrap.appendChild(hueSlider);
+    pop.appendChild(hueWrap);
+
+    // Preview + hex
+    const bottom = document.createElement('div');
+    bottom.className = 'tc-bottom';
+    const previewEl = document.createElement('div');
+    previewEl.className = 'tc-preview';
+    const hexWrap = document.createElement('div');
+    hexWrap.className = 'tc-hex-wrap';
+    const hexPrefix = document.createElement('span');
+    hexPrefix.className = 'tc-hex-prefix'; hexPrefix.textContent = '#';
+    const hexInput = document.createElement('input');
+    hexInput.type = 'text'; hexInput.className = 'tc-hex';
+    hexInput.maxLength = 6; hexInput.spellcheck = false;
+    hexInput.addEventListener('input', () => {
+        const v6 = hexInput.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
+        hexInput.value = v6.toUpperCase();
+        if (v6.length === 6) {
+            const hsv = tcHexToHsv('#' + v6);
+            hue = hsv.h; sat = hsv.s; val = hsv.v;
+            hueSlider.value = hue;
+            tcDrawCanvas(canvas.getContext('2d'), CW, CH, hue);
+            updateCursor();
+            previewEl.style.background = '#' + v6;
+            syncSwatchActive();
+            liveApply();
+        }
+    });
+    hexWrap.append(hexPrefix, hexInput);
+    bottom.append(previewEl, hexWrap);
+    pop.appendChild(bottom);
+
+    // Preset swatches
+    const presetsLbl = document.createElement('div');
+    presetsLbl.className = 'tc-section-label'; presetsLbl.textContent = 'Presets';
+    pop.appendChild(presetsLbl);
+    const presetsRow = document.createElement('div');
+    presetsRow.className = 'tc-swatches-row';
+
+    const resetSwatch = document.createElement('button');
+    resetSwatch.type = 'button'; resetSwatch.className = 'tc-mini-swatch reset';
+    resetSwatch.title = 'Default color';
+    resetSwatch.addEventListener('click', () => {
+        clearTimeout(applyTimer);
+        if (mode === 'whole') setNoteTextColor(null);
+        else applySelColor(null);
+        closeTextColorPopover();
+    });
+    presetsRow.appendChild(resetSwatch);
+
+    TEXT_COLORS.forEach(tc => {
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'tc-mini-swatch';
+        btn.style.background = tc.value; btn.title = tc.label;
+        btn.dataset.colorVal = tc.value;
+        btn.addEventListener('click', () => {
+            clearTimeout(applyTimer);
+            tcAddRecent(tc.value);
+            if (mode === 'whole') {
+                setNoteTextColor(tc.value);
+                _tcOnClose = null;
+            } else {
+                applySelColor(tc.value);
+                showToast('Color applied');
+            }
+            closeTextColorPopover();
+        });
+        presetsRow.appendChild(btn);
+    });
+    pop.appendChild(presetsRow);
+
+    // Recent swatches
+    const recents = (state.ui.recentTextColors || []).filter(Boolean);
+    if (recents.length > 0) {
+        const recLbl = document.createElement('div');
+        recLbl.className = 'tc-section-label';
+        recLbl.style.marginTop = '8px'; recLbl.textContent = 'Recent';
+        pop.appendChild(recLbl);
+        const recRow = document.createElement('div');
+        recRow.className = 'tc-swatches-row';
+        recents.forEach(color => {
+            const btn = document.createElement('button');
+            btn.type = 'button'; btn.className = 'tc-mini-swatch';
+            btn.style.background = color; btn.title = color;
+            btn.dataset.colorVal = color;
+            btn.addEventListener('click', () => {
+                clearTimeout(applyTimer);
+                tcAddRecent(color);
+                if (mode === 'whole') {
+                    setNoteTextColor(color);
+                    _tcOnClose = null;
+                } else {
+                    applySelColor(color);
+                    showToast('Color applied');
+                }
+                closeTextColorPopover();
+            });
+            recRow.appendChild(btn);
+        });
+        pop.appendChild(recRow);
+    }
+
+    // --- canvas interaction ---
+    const ctx = canvas.getContext('2d');
+
+    const updateCursor = () => {
+        cursor.style.left = `${sat * 100}%`;
+        cursor.style.top = `${(1 - val) * 100}%`;
+    };
+
+    const syncBottom = () => {
+        const hex = getHex();
+        previewEl.style.background = hex;
+        hexInput.value = hex.slice(1).toUpperCase();
+    };
+
+    const syncSwatchActive = () => {
+        const hex = getHex().toUpperCase();
+        presetsRow.querySelectorAll('.tc-mini-swatch[data-color-val]').forEach(b => {
+            b.classList.toggle('active', (b.dataset.colorVal || '').toUpperCase() === hex);
+        });
+    };
+
+    const syncAll = () => {
+        tcDrawCanvas(ctx, CW, CH, hue);
+        hueSlider.value = hue;
+        updateCursor();
+        syncBottom();
+        syncSwatchActive();
+    };
+
+    const pickFromCanvas = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+        const y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+        sat = x / rect.width;
+        val = 1 - y / rect.height;
+        updateCursor();
+        syncBottom();
+        syncSwatchActive();
+        liveApply();
+    };
+
+    let isDragging = false;
+    const onMouseMove = (e) => { if (isDragging) pickFromCanvas(e); };
+    const onMouseUp = () => { isDragging = false; };
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true; pickFromCanvas(e); e.preventDefault();
+    });
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+    // --- on close: persist and clean up ---
+    _tcOnClose = () => {
+        clearTimeout(applyTimer);
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        if (!hasInteracted) return;
+        const hex = getHex();
+        if (mode === 'whole') {
+            setNoteTextColor(hex);
+            tcAddRecent(hex);
+        } else {
+            persistEditor();
+        }
+    };
+
+    // --- mount and position ---
+    document.body.appendChild(pop);
+    $('#textColorBtn')?.setAttribute('aria-expanded', 'true');
+
+    requestAnimationFrame(() => syncAll());
+
+    const rect = anchorEl.getBoundingClientRect();
+    const popW = 284;
+    const left = Math.max(8, Math.min(rect.left, window.innerWidth - popW - 8));
+    pop.style.top = `${rect.bottom + 6}px`;
+    pop.style.left = `${left}px`;
+}
+
+/* =========================================================
+   GENERIC COLOR PICKER (note bg, folder color)
+   ========================================================= */
+
+const _genericPickerOnClose = {};
+
+function closeGenericColorPicker(popId) {
+    if (typeof _genericPickerOnClose[popId] === 'function') {
+        try { _genericPickerOnClose[popId](); } catch (_) {}
+        delete _genericPickerOnClose[popId];
+    }
+    document.getElementById(popId)?.remove();
+}
+
+function openGenericColorPicker(anchorRect, { popId, title, initColor, swatches, recentKey, onLive, onCommit, onReset }) {
+    closeAllPopovers();
+
+    let { h: hue, s: sat, v: val } = tcHexToHsv(initColor || '#C45BFF');
+    const getHex = () => tcHsvToHex(hue, sat, val);
+    let hasInteracted = false;
+
+    const liveApply = (() => {
+        let t = null;
+        return () => {
+            hasInteracted = true;
+            clearTimeout(t);
+            t = setTimeout(() => { if (onLive) onLive(getHex()); }, 80);
+        };
+    })();
+
+    const pop = document.createElement('div');
+    pop.id = popId;
+    pop.className = 'color-picker-pop';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'tc-popover-header';
+    const titleEl = document.createElement('span');
+    titleEl.className = 'tc-popover-title';
+    titleEl.textContent = title;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tc-popover-close'; closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>`;
+    closeBtn.addEventListener('click', () => closeGenericColorPicker(popId));
+    header.append(titleEl, closeBtn);
+    pop.appendChild(header);
+
+    // Canvas
+    const canvasWrap = document.createElement('div');
+    canvasWrap.className = 'tc-canvas-wrap';
+    const canvas = document.createElement('canvas');
+    canvas.className = 'tc-canvas';
+    const CW = 256, CH = 148;
+    canvas.width = CW; canvas.height = CH;
+    const cursor = document.createElement('div');
+    cursor.className = 'tc-cursor';
+    canvasWrap.append(canvas, cursor);
+    pop.appendChild(canvasWrap);
+
+    // Hue slider
+    const hueWrap = document.createElement('div');
+    hueWrap.className = 'tc-hue-wrap';
+    const hueSlider = document.createElement('input');
+    hueSlider.type = 'range'; hueSlider.min = 0; hueSlider.max = 360; hueSlider.step = 1;
+    hueSlider.className = 'tc-hue'; hueSlider.value = hue;
+    hueSlider.addEventListener('input', () => {
+        hue = parseFloat(hueSlider.value);
+        tcDrawCanvas(canvas.getContext('2d'), CW, CH, hue);
+        syncBottom(); liveApply();
+    });
+    hueWrap.appendChild(hueSlider);
+    pop.appendChild(hueWrap);
+
+    // Preview + hex
+    const bottom = document.createElement('div');
+    bottom.className = 'tc-bottom';
+    const previewEl = document.createElement('div');
+    previewEl.className = 'tc-preview';
+    const hexWrap = document.createElement('div');
+    hexWrap.className = 'tc-hex-wrap';
+    const hexPrefix = document.createElement('span');
+    hexPrefix.className = 'tc-hex-prefix'; hexPrefix.textContent = '#';
+    const hexInput = document.createElement('input');
+    hexInput.type = 'text'; hexInput.className = 'tc-hex';
+    hexInput.maxLength = 6; hexInput.spellcheck = false;
+    hexInput.addEventListener('input', () => {
+        const v6 = hexInput.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
+        hexInput.value = v6.toUpperCase();
+        if (v6.length === 6) {
+            const hsv = tcHexToHsv('#' + v6);
+            hue = hsv.h; sat = hsv.s; val = hsv.v;
+            hueSlider.value = hue;
+            tcDrawCanvas(canvas.getContext('2d'), CW, CH, hue);
+            updateCursor(); previewEl.style.background = '#' + v6;
+            syncSwatchActive(); liveApply();
+        }
+    });
+    hexWrap.append(hexPrefix, hexInput);
+    bottom.append(previewEl, hexWrap);
+    pop.appendChild(bottom);
+
+    // Presets
+    const presetsLbl = document.createElement('div');
+    presetsLbl.className = 'tc-section-label'; presetsLbl.textContent = 'Presets';
+    pop.appendChild(presetsLbl);
+    const presetsRow = document.createElement('div');
+    presetsRow.className = 'tc-swatches-row';
+
+    if (onReset) {
+        const resetSwatch = document.createElement('button');
+        resetSwatch.type = 'button'; resetSwatch.className = 'tc-mini-swatch reset';
+        resetSwatch.title = 'No color';
+        resetSwatch.addEventListener('click', () => {
+            onReset(); closeGenericColorPicker(popId);
+        });
+        presetsRow.appendChild(resetSwatch);
+    }
+
+    (swatches || []).forEach(sw => {
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'tc-mini-swatch';
+        btn.style.background = sw.value; btn.title = sw.label;
+        btn.dataset.colorVal = sw.value;
+        btn.addEventListener('click', () => {
+            onCommit(sw.value);
+            if (recentKey) {
+                state.ui[recentKey] = [sw.value, ...(state.ui[recentKey] || []).filter(c => c !== sw.value)].slice(0, 7);
+                saveState();
+            }
+            closeGenericColorPicker(popId);
+        });
+        presetsRow.appendChild(btn);
+    });
+    pop.appendChild(presetsRow);
+
+    // Recent
+    const recents = recentKey ? (state.ui[recentKey] || []).filter(Boolean) : [];
+    if (recents.length > 0) {
+        const recLbl = document.createElement('div');
+        recLbl.className = 'tc-section-label';
+        recLbl.style.marginTop = '8px'; recLbl.textContent = 'Recent';
+        pop.appendChild(recLbl);
+        const recRow = document.createElement('div');
+        recRow.className = 'tc-swatches-row';
+        recents.forEach(color => {
+            const btn = document.createElement('button');
+            btn.type = 'button'; btn.className = 'tc-mini-swatch';
+            btn.style.background = color; btn.title = color;
+            btn.dataset.colorVal = color;
+            btn.addEventListener('click', () => {
+                onCommit(color);
+                if (recentKey) {
+                    state.ui[recentKey] = [color, ...(state.ui[recentKey] || []).filter(c => c !== color)].slice(0, 7);
+                    saveState();
+                }
+                closeGenericColorPicker(popId);
+            });
+            recRow.appendChild(btn);
+        });
+        pop.appendChild(recRow);
+    }
+
+    // Canvas interaction
+    const ctx = canvas.getContext('2d');
+    const updateCursor = () => {
+        cursor.style.left = `${sat * 100}%`;
+        cursor.style.top = `${(1 - val) * 100}%`;
+    };
+    const syncBottom = () => {
+        const hex = getHex();
+        previewEl.style.background = hex;
+        hexInput.value = hex.slice(1).toUpperCase();
+    };
+    const syncSwatchActive = () => {
+        const hex = getHex().toUpperCase();
+        presetsRow.querySelectorAll('.tc-mini-swatch[data-color-val]').forEach(b => {
+            b.classList.toggle('active', (b.dataset.colorVal || '').toUpperCase() === hex);
+        });
+    };
+    const syncAll = () => {
+        tcDrawCanvas(ctx, CW, CH, hue);
+        hueSlider.value = hue;
+        updateCursor(); syncBottom(); syncSwatchActive();
+    };
+    const pickFromCanvas = (e) => {
+        const r = canvas.getBoundingClientRect();
+        sat = Math.max(0, Math.min((e.clientX - r.left) / r.width, 1));
+        val = Math.max(0, Math.min(1 - (e.clientY - r.top) / r.height, 1));
+        updateCursor(); syncBottom(); syncSwatchActive(); liveApply();
+    };
+    let isDragging = false;
+    const onMouseMove = (e) => { if (isDragging) pickFromCanvas(e); };
+    const onMouseUp = () => { isDragging = false; };
+    canvas.addEventListener('mousedown', (e) => { isDragging = true; pickFromCanvas(e); e.preventDefault(); });
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+    _genericPickerOnClose[popId] = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        if (!hasInteracted) return;
+        const hex = getHex();
+        onCommit(hex);
+        if (recentKey) {
+            state.ui[recentKey] = [hex, ...(state.ui[recentKey] || []).filter(c => c !== hex)].slice(0, 7);
+            saveState();
+        }
+    };
+
+    document.body.appendChild(pop);
+    requestAnimationFrame(() => syncAll());
+
+    const popW = 284;
+    const left = Math.max(8, Math.min(anchorRect.left, window.innerWidth - popW - 8));
+    let top = (anchorRect.bottom || anchorRect.top) + 6;
+    if (top + 420 > window.innerHeight - 8) top = Math.max(8, anchorRect.top - 420 - 4);
+    pop.style.top = `${top}px`;
+    pop.style.left = `${left}px`;
+}
+
+/* =========================================================
+   FONT FAMILY PICKER
+   ========================================================= */
+
+function closeFontPicker() {
+    document.getElementById('fontFamilyPop')?.remove();
+    $('#fontFamilyBtn')?.setAttribute('aria-expanded', 'false');
+}
+
+function openFontPicker(anchorEl) {
+    if (document.getElementById('fontFamilyPop')) { closeFontPicker(); return; }
+    closeAllPopovers();
+
+    const note = currentNote();
+    const currentFont = note?.settings?.fontKey || note?.fontKey || 'system-ui';
+
+    const pop = document.createElement('div');
+    pop.id = 'fontFamilyPop';
+    pop.className = 'font-picker-pop';
+
+    const search = document.createElement('input');
+    search.type = 'text'; search.className = 'ff-search';
+    search.placeholder = 'Search font…';
+    search.setAttribute('aria-label', 'Search fonts');
+    pop.appendChild(search);
+
+    const list = document.createElement('ul');
+    list.className = 'ff-list';
+    list.setAttribute('role', 'listbox');
+
+    const renderList = (filter = '') => {
+        list.innerHTML = '';
+        const lower = filter.toLowerCase();
+        const keys = filter
+            ? FONT_KEYS.filter(k => (k === 'system-ui' ? 'sans' : k).toLowerCase().includes(lower))
+            : FONT_KEYS;
+        keys.forEach(key => {
+            const label = key === 'system-ui' ? 'Sans' : key;
+            const li = document.createElement('li');
+            li.className = 'ff-item' + (key === currentFont ? ' active' : '');
+            li.textContent = label;
+            li.style.fontFamily = cssFont(key);
+            li.setAttribute('role', 'option');
+            li.addEventListener('click', () => {
+                setNoteFont(key);
+                closeFontPicker();
+            });
+            list.appendChild(li);
+        });
+        list.querySelector('.ff-item.active')?.scrollIntoView({ block: 'nearest' });
+    };
+
+    search.addEventListener('input', () => renderList(search.value));
+    pop.appendChild(list);
+    document.body.appendChild(pop);
+    renderList();
+
+    anchorEl.setAttribute('aria-expanded', 'true');
+
+    const rect = anchorEl.getBoundingClientRect();
+    const popW = 188;
+    const left = Math.max(8, Math.min(rect.left, window.innerWidth - popW - 8));
+    pop.style.top = `${rect.bottom + 4}px`;
+    pop.style.left = `${left}px`;
+
+    setTimeout(() => search.focus(), 30);
+}
+
+function setNoteFont(key) {
+    const note = currentNote();
+    if (!note) return;
+    note.settings = note.settings || {};
+    note.settings.fontKey = key;
+    note.fontKey = key;
+    note.updatedAt = nowIso();
+    $('#editor').style.fontFamily = cssFont(key);
+    const btn = $('#fontFamilyBtn');
+    if (btn) btn.textContent = key === 'system-ui' ? 'Sans' : key;
+    persistEditor();
+}
+
+/* =========================================================
+   TEXT STYLE PICKER (font size + heading presets)
+   ========================================================= */
+
+function closeTextStylePicker() {
+    document.getElementById('textStylePop')?.remove();
+    $('#fontSizeBtn')?.setAttribute('aria-expanded', 'false');
+}
+
+function applyHeadingStyle(style) {
+    const editor = $('#editor');
+    if (!editor) return;
+    editor.focus({ preventScroll: true });
+    restoreEditorSelection();
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount || sel.getRangeAt(0).collapsed) {
+        showToast('Select text first');
+        return;
+    }
+    const range = sel.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.fontSize = style.size;
+    span.style.fontWeight = style.weight;
+    span.style.lineHeight = style.lh;
+    try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        sel.removeAllRanges();
+        const nr = document.createRange();
+        nr.selectNodeContents(span);
+        sel.addRange(nr);
+        saveEditorSelection();
+        persistEditor();
+        showToast(`${style.badge === '¶' || style.badge === 'Aa' ? style.preview : style.badge} applied`);
+    } catch (_) {}
+}
+
+function applySize(size) {
+    const note = currentNote();
+    if (!note) return;
+    note.settings = note.settings || {};
+    note.settings.fontSize = size;
+    note.fontSize = size;
+    note.updatedAt = nowIso();
+    $('#editor').style.fontSize = size;
+    updateSizeBtn(size);
+    persistEditor();
+}
+
+function updateSizeBtn(size) {
+    const btn = $('#fontSizeBtn');
+    if (btn) btn.textContent = size.replace('px', '');
+}
+
+function openTextStylePicker(anchorEl) {
+    if (document.getElementById('textStylePop')) { closeTextStylePicker(); return; }
+    closeAllPopovers();
+
+    const note = currentNote();
+    const activeSize = note?.settings?.fontSize || note?.fontSize || '16px';
+
+    const pop = document.createElement('div');
+    pop.id = 'textStylePop';
+    pop.className = 'ts-picker-pop';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'tc-popover-header';
+    const titleEl = document.createElement('span');
+    titleEl.className = 'tc-popover-title';
+    titleEl.textContent = 'Font Size';
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button'; closeBtn.className = 'tc-popover-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>`;
+    closeBtn.addEventListener('click', closeTextStylePicker);
+    header.append(titleEl, closeBtn);
+    pop.appendChild(header);
+
+    const sizeList = document.createElement('ul');
+    sizeList.className = 'ts-size-list';
+
+    const markActive = (size) => {
+        sizeList.querySelectorAll('.ts-size-item').forEach(p => {
+            p.classList.toggle('active', p.dataset.size === size);
+        });
+    };
+
+    let activeItem = null;
+    SIZE_OPTIONS.forEach(size => {
+        const item = document.createElement('li');
+        item.className = 'ts-size-item' + (size === activeSize ? ' active' : '');
+        item.dataset.size = size;
+        const numSpan = document.createElement('span');
+        numSpan.textContent = size.replace('px', '');
+        const unitSpan = document.createElement('span');
+        unitSpan.className = 'ts-size-item-unit';
+        unitSpan.textContent = 'px';
+        item.append(numSpan, unitSpan);
+        item.addEventListener('click', () => {
+            applySize(size);
+            markActive(size);
+            customInput.value = size.replace('px', '');
+        });
+        sizeList.appendChild(item);
+        if (size === activeSize) activeItem = item;
+    });
+    pop.appendChild(sizeList);
+
+    // ---- Custom size row ----
+    const customRow = document.createElement('div');
+    customRow.className = 'ts-custom-row';
+
+    const minusBtn = document.createElement('button');
+    minusBtn.type = 'button'; minusBtn.className = 'ts-custom-spin';
+    minusBtn.textContent = '−'; minusBtn.title = 'Decrease size';
+
+    const customInput = document.createElement('input');
+    customInput.type = 'number'; customInput.className = 'ts-custom-input';
+    customInput.min = 8; customInput.max = 200;
+    customInput.value = parseInt(activeSize) || 16;
+
+    const plusBtn = document.createElement('button');
+    plusBtn.type = 'button'; plusBtn.className = 'ts-custom-spin';
+    plusBtn.textContent = '+'; plusBtn.title = 'Increase size';
+
+    const unit = document.createElement('span');
+    unit.className = 'ts-custom-unit'; unit.textContent = 'px';
+
+    const commitCustom = () => {
+        const n = Math.max(8, Math.min(200, parseInt(customInput.value) || 16));
+        customInput.value = n;
+        const size = `${n}px`;
+        applySize(size);
+        markActive(size);
+    };
+
+    minusBtn.addEventListener('click', () => {
+        customInput.value = Math.max(8, parseInt(customInput.value) - 1);
+        commitCustom();
+    });
+    plusBtn.addEventListener('click', () => {
+        customInput.value = Math.min(200, parseInt(customInput.value) + 1);
+        commitCustom();
+    });
+    customInput.addEventListener('change', commitCustom);
+    customInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { commitCustom(); closeTextStylePicker(); }
+    });
+
+    customRow.append(minusBtn, customInput, unit, plusBtn);
+    pop.appendChild(customRow);
+
+    // Mount + position
+    document.body.appendChild(pop);
+    anchorEl.setAttribute('aria-expanded', 'true');
+
+    const rect = anchorEl.getBoundingClientRect();
+    const popW = 160;
+    const left = Math.max(8, Math.min(rect.left, window.innerWidth - popW - 8));
+    let top = rect.bottom + 4;
+    if (top + 260 > window.innerHeight - 8) top = Math.max(8, rect.top - 260 - 4);
+    pop.style.top = `${top}px`;
+    pop.style.left = `${left}px`;
+
+    // Scroll active size into view
+    if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
+}
+
 /* Persist editor changes (debounced) */
 const persistEditor = debounce(() => {
     const note = currentNote();
@@ -1296,7 +2293,8 @@ const persistEditor = debounce(() => {
     note.updatedAt = nowIso();
     saveStateRaw();
     // Re-render meta + tree (preview/title may have changed)
-    $('#metaUpdated').textContent = `Modified ${relativeTime(note.updatedAt)}`;
+    const metaDateText = document.querySelector('#metaUpdated .meta-date-text');
+    if (metaDateText) metaDateText.textContent = `Modified ${relativeTime(note.updatedAt)}`;
     renderNotesList();
     renderNavCounts();
 }, 200);
@@ -1429,6 +2427,7 @@ function restoreFromFile(event) {
             notes.forEach(n => {
                 n.tags = Array.isArray(n.tags) ? n.tags : [];
                 n.color = n.color || null;
+                n.textColor = n.textColor || null;
                 n.pinned = !!n.pinned;
                 if (typeof n.folderId === 'undefined') n.folderId = null;
                 if (!n.createdAt) n.createdAt = nowIso();
@@ -1539,17 +2538,6 @@ function showToast(text) {
    INPUT BINDING
    =========================================================== */
 
-function populateFontSelect() {
-    const sel = $('#fontFamily');
-    sel.innerHTML = '';
-    FONT_KEYS.forEach(key => {
-        const opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = key === 'system-ui' ? 'Sans' : key;
-        sel.appendChild(opt);
-    });
-}
-
 function bindAll() {
     // Smart lists
     $$('.nav-item').forEach(el => el.addEventListener('click', () => setView(el.dataset.view)));
@@ -1596,29 +2584,24 @@ function bindAll() {
         });
     });
     // Font apply to entire workspace (editor body)
-    $('#fontFamily').addEventListener('change', (e) => {
-        const note = currentNote();
-        if (!note) return;
-        note.settings = note.settings || {};
-        note.settings.fontKey = e.target.value;
-        note.fontKey = e.target.value;
-        note.updatedAt = nowIso();
-        $('#editor').style.fontFamily = cssFont(e.target.value);
-        persistEditor();
+    $('#fontFamilyBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openFontPicker(e.currentTarget);
     });
-    $('#fontSize').addEventListener('change', (e) => {
-        const note = currentNote();
-        if (!note) return;
-        note.settings = note.settings || {};
-        note.settings.fontSize = e.target.value;
-        note.fontSize = e.target.value;
-        note.updatedAt = nowIso();
-        $('#editor').style.fontSize = e.target.value;
-        persistEditor();
+    $('#fontSizeBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openTextStylePicker(e.currentTarget);
     });
 
-    // Custom color picker
-    $('#customColor').addEventListener('input', (e) => setNoteColor(e.target.value));
+    // Text color popover
+    $('#textColorBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if ($('#textColorPopover')) {
+            closeTextColorPopover();
+        } else {
+            openTextColorPopover(e.currentTarget);
+        }
+    });
 
     // Pin badge toggles pin
     $('#pinBadge').addEventListener('click', () => {
@@ -1661,6 +2644,26 @@ function bindAll() {
         if (palettePop && !e.target.closest('#workspaceThemePopover') && !e.target.closest('#paletteBtn')) {
             closeWorkspaceThemePopover();
         }
+        const tcPop = $('#textColorPopover');
+        if (tcPop && !e.target.closest('#textColorPopover') && !e.target.closest('#textColorBtn')) {
+            closeTextColorPopover();
+        }
+        const noteBgPop = $('#noteBgColorPop');
+        if (noteBgPop && !e.target.closest('#noteBgColorPop') && !e.target.closest('.swatch.custom')) {
+            closeGenericColorPicker('noteBgColorPop');
+        }
+        const folderCPop = $('#folderCustomColorPop');
+        if (folderCPop && !e.target.closest('#folderCustomColorPop')) {
+            closeGenericColorPicker('folderCustomColorPop');
+        }
+        const fontPop = $('#fontFamilyPop');
+        if (fontPop && !e.target.closest('#fontFamilyPop') && !e.target.closest('#fontFamilyBtn')) {
+            closeFontPicker();
+        }
+        const tsPop = $('#textStylePop');
+        if (tsPop && !e.target.closest('#textStylePop') && !e.target.closest('#fontSizeBtn')) {
+            closeTextStylePicker();
+        }
     });
 
     // Modal close
@@ -1691,6 +2694,11 @@ function bindAll() {
             if (menuOpen) toggleMenu(false);
             closeFolderColorPopover();
             closeWorkspaceThemePopover();
+            closeTextColorPopover();
+            closeGenericColorPicker('noteBgColorPop');
+            closeGenericColorPicker('folderCustomColorPop');
+            closeFontPicker();
+            closeTextStylePicker();
             if (!$('#moveModal').classList.contains('hidden')) closeMoveModal();
         }
     });
@@ -1707,7 +2715,6 @@ function bindAll() {
    MAIN
    =========================================================== */
 async function main() {
-    populateFontSelect();
     await loadState();
     bindAll();
     watchStorage();

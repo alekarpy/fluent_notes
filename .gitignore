@@ -18,5 +18,7 @@ node_modules/
 # Shell scripts (no subirlos por error)
 *.sh
 
-# Old versions / snapshots
+# Old versions / snapshots / working folders
 Version_*/
+Pastel 1/
+Primera Version*/
